@@ -24,7 +24,6 @@ public class BombController : MonoBehaviour {
             GameObject newExplosion = (GameObject)Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(newExplosion, 2);
 
-
             Destroy(gameObject);
         }
 
