@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour {
     public int shotsFired = 0;
     public int goalHits = 0;
     public Canvas InstructionCanvas;
+    public Canvas PlayerScoreCanvas;
     public Text PlayerScoreText;
     public Text PlayerTimerText;
     public Text PlayerWaveText;
@@ -25,14 +26,18 @@ public class GameController : MonoBehaviour {
     public AudioSource Siren;
 
 
-    private float zOriginalLocation;
-    private float zHiddenLocation = 1000;
+    private float InstructionCanvasOriginalZPos;
+    private float InstructionCanvasHiddenZPos = 1000;
 
-    
-	// Use this for initialization
-	void Start () {
+    private float PlayerScoreCanvasOriginalZPos;
+    private float PlayerScoreCanvasHiddenZPos = 1000;
 
-        zOriginalLocation = InstructionCanvas.transform.position.z;
+
+    // Use this for initialization
+    void Start () {
+
+        InstructionCanvasOriginalZPos = InstructionCanvas.transform.position.z;
+        PlayerScoreCanvasOriginalZPos = PlayerScoreCanvas.transform.position.z;
 
         this.Show();
 
@@ -105,8 +110,13 @@ public class GameController : MonoBehaviour {
     public void Show()
     {
         Vector3 pos = InstructionCanvas.transform.position;
-        pos.z = zOriginalLocation;
+        pos.z = InstructionCanvasOriginalZPos;
         InstructionCanvas.transform.position = pos;
+
+        pos = PlayerScoreCanvas.transform.position;
+        pos.z = PlayerScoreCanvasHiddenZPos; 
+        PlayerScoreCanvas.transform.position = pos;
+
         InstructionCanvas.GetComponent<AudioSource>().Play();
         IsRunning = false;
 
@@ -116,8 +126,13 @@ public class GameController : MonoBehaviour {
     public void Hide()
     {
         Vector3 pos = InstructionCanvas.transform.position;
-        pos.z = zHiddenLocation;
+        pos.z = InstructionCanvasHiddenZPos;
         InstructionCanvas.transform.position = pos;
+
+        pos = PlayerScoreCanvas.transform.position;
+        pos.z = PlayerScoreCanvasOriginalZPos;
+        PlayerScoreCanvas.transform.position = pos;
+
         InstructionCanvas.GetComponent<AudioSource>().Stop();
         IsRunning = true;
 
