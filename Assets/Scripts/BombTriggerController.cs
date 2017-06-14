@@ -20,7 +20,12 @@ public class BombTriggerController : MonoBehaviour {
         if (col.gameObject.tag == "EnemyBomber")
         {
             col.gameObject.GetComponent<EnemyController>().dropBomb = true;
-            //newBomb.GetComponent<Rigidbody>().velocity = col.gameObject.GetComponent<Rigidbody>().velocity;
+        }
+
+        if (col.gameObject.tag == "EnemyJet")
+        {
+            //col.gameObject.transform.Rotate(new Vector3(-45, 0, 0));
+            col.gameObject.GetComponent<EnemyController>().bank = true;
         }
     }
 }

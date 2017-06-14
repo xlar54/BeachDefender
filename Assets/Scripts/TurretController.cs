@@ -7,6 +7,7 @@ public class TurretController : MonoBehaviour {
     public float turretSpeed;
     public float rotationSpeed;
 
+    public GameObject GameManager;
     public Transform barrel;
     public Transform projectileSpawnPoint;
     public Transform barrelDisc;
@@ -15,6 +16,7 @@ public class TurretController : MonoBehaviour {
 
     public GameObject projectile;
     public ParticleSystem smokeParticles;
+
 
 	// Use this for initialization
 	void Start () {
@@ -26,35 +28,41 @@ public class TurretController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * turretSpeed;
-        var z = Input.GetAxis("Vertical") * Time.deltaTime * rotationSpeed;
 
-        barrel.Rotate(z, 0, 0);
-        barrelDisc.Rotate(0, x, 0);
-        //transform.Translate(x, 0, 0);
-
-        if (Input.GetButtonDown("Fire1"))
+        if (GameManager.GetComponent<GameController>().IsRunning)
         {
-            GameObject newBullet = (GameObject)Instantiate(projectile, projectileSpawnPoint.position, Quaternion.identity);
+            var x = Input.GetAxis("Horizontal") * Time.deltaTime * turretSpeed;
+            var z = Input.GetAxis("Vertical") * Time.deltaTime * rotationSpeed;
 
-            // fix rotation of spawned object. not always needed
-            Vector3 rotFix = projectileSpawnPoint.rotation.eulerAngles;
-            rotFix.x -= 90;
-            newBullet.transform.Rotate(rotFix);
+            barrel.Rotate(z, 0, 0);
+            barrelDisc.Rotate(0, x, 0);
+            //transform.Translate(x, 0, 0);
 
-            // set destroy time
-            Destroy(newBullet, destroyAfter);
+            if (Input.GetButtonDown("Fire1"))
+            {
+                GameObject newBullet = (GameObject)Instantiate(projectile, projectileSpawnPoint.position, Quaternion.identity);
 
-            // Send it on its way
-            newBullet.GetComponent<Rigidbody>().AddForce(projectileSpawnPoint.up * projectileForce);
+                // fix rotation of spawned object. not always needed
+                Vector3 rotFix = projectileSpawnPoint.rotation.eulerAngles;
+                rotFix.x -= 90;
+                newBullet.transform.Rotate(rotFix);
 
-            GetComponent<AudioSource>().Play();
+                // set destroy time
+                Destroy(newBullet, destroyAfter);
 
-            //smokeParticles.Emit(3);
+                // Send it on its way
+                newBullet.GetComponent<Rigidbody>().AddForce(projectileSpawnPoint.up * projectileForce);
 
+                GetComponent<AudioSource>().Play();
+
+                GetComponent<Animator>().SetTrigger("Fire");
+
+                smokeParticles.Emit(1);
+
+                //Camera c = Camera.main;
+                //c.GetComponent<CameraShake>().ShakeCamera(20f, 1f);
+            }
         }
-
 
 	}
 }

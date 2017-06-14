@@ -20,6 +20,8 @@ public class BombController : MonoBehaviour {
     {
         if (collision.gameObject.tag != "Target" && collision.gameObject.tag != "EnemyBomber")
         {
+            //Camera c = Camera.current;
+            //c.GetComponent<CameraShake>().ShakeCamera(20f, 1f);
 
             GameObject newExplosion = (GameObject)Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(newExplosion, 2);

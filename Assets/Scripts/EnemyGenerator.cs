@@ -17,6 +17,8 @@ public class EnemyGenerator : MonoBehaviour {
     public GameObject bomber;
     public Transform spawnPoint;
 
+    public GameObject GameManager;
+
     private System.DateTime lastTime;
 
 	// Use this for initialization
@@ -29,44 +31,51 @@ public class EnemyGenerator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        System.DateTime currentTime = System.DateTime.Now;
-
-        var diffInSeconds = (currentTime - lastTime).TotalSeconds;
-
-        if (diffInSeconds > waitTime)
+        if (GameManager.GetComponent<GameController>().IsRunning)
         {
-            int randomSpawnCount = Random.Range(spawnMin, spawnMax);
+            System.DateTime currentTime = System.DateTime.Now;
 
-            for (int z = 0; z < randomSpawnCount; z++)
+            var diffInSeconds = (currentTime - lastTime).TotalSeconds;
+
+            if (diffInSeconds > waitTime)
             {
-
-                CreatePlane(jetFighter);
-
-                if (Random.Range(0,100) < bomberPercentage)
-                {
-                    CreatePlane(bomber);
-                }
-
+                DoGeneration();
+                lastTime = currentTime;   
             }
-
-            lastTime = currentTime;
-
         }
 
 
 	}
+
+    private void DoGeneration()
+    {
+        int randomSpawnCount = Random.Range(spawnMin, spawnMax);
+
+        for (int z = 0; z < randomSpawnCount; z++)
+        {
+            CreatePlane(jetFighter);
+
+            if (Random.Range(0, 100) < bomberPercentage)
+            {
+                CreatePlane(bomber);
+            }
+        }
+
+    }
 
     private void CreatePlane(GameObject plane)
     {
         GameObject go = (GameObject)Instantiate(plane, spawnPoint.position, Quaternion.identity);
 
         ((EnemyController)go.GetComponent<EnemyController>()).speed = Random.Range(speedMin, speedMax);
+        ((EnemyController)go.GetComponent<EnemyController>()).GameManager = GameManager;
+
 
         // Fix rotation
-        Vector3 rotFix = spawnPoint.rotation.eulerAngles;
-        rotFix.x -= 90;
-        rotFix.z += 90;
-        go.transform.Rotate(rotFix);
+        //Vector3 rotFix = spawnPoint.rotation.eulerAngles;
+        //rotFix.x -= 90;
+        //rotFix.z += 90;
+        //go.transform.Rotate(rotFix);
 
 
         // Randomize x and y

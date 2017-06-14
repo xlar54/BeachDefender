@@ -9,25 +9,62 @@ public class EnemyController : MonoBehaviour {
     public bool dropBomb;
     public GameObject bomb;
     public Transform bombSpawnPoint;
+    public bool bank;
+    public GameObject GameManager;
+
 
     private Vector3 previous;
     public float velocity;
 
-	// Use this for initialization
-	void Start () {
+    private Quaternion startRotation;
+    private int bankDirection;
+    private int bankAngle;
+    private bool fixBank;
+
+    // Use this for initialization
+    void Start () {
 
         previous = transform.position;
 
+        startRotation = transform.rotation;
+        bankDirection = Random.Range(0, 2) * 2 - 1;
+        bankAngle = 30;
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        float translation = Time.deltaTime * speed;
-        transform.Translate(translation, 0, 0);
+        transform.Translate(-Vector3.forward * Time.deltaTime * speed);
 
         velocity = ((transform.position - previous).magnitude) / Time.deltaTime;
         previous = transform.position;
+
+
+        if (bank)
+        {
+            var v = -1 * bankDirection;
+            transform.Rotate(new Vector3(0.5f, bankDirection * 0.5f, bankDirection * bankAngle * Time.deltaTime * 3));
+            
+            if (Quaternion.Angle(transform.rotation, startRotation) > bankAngle)
+            {
+                bank = false;
+                fixBank = true;
+            }
+
+        }
+
+        /*if (fixBank)
+        {
+            transform.Rotate(new Vector3(-bankDirection * bankAngle * Time.deltaTime * 3, -0.3f, 0));
+
+            if (Quaternion.Angle(transform.rotation, startRotation) == 0)
+            {
+                //transform.Rotate(new Vector3(0, -0.3f, 0));
+                fixBank = false;
+            }
+        }*/
+
+
 
         if (dropBomb)
         {
@@ -47,12 +84,18 @@ public class EnemyController : MonoBehaviour {
     {
         if(collision.gameObject.tag != "EnemyBomb")
         {
+            if (gameObject.tag == "EnemyJet")
+            {
+                GameManager.GetComponent<GameController>().score += 10;
+                GameManager.GetComponent<GameController>().hits++;
+            }
 
-        GameObject newExplosion = (GameObject)Instantiate(explosion, transform.position, Quaternion.identity);
-        Destroy(newExplosion, 2);
-        
+            GameObject newExplosion = (GameObject)Instantiate(explosion, transform.position, Quaternion.identity);
+            Destroy(newExplosion, 2);
+            Destroy(gameObject);
 
-        Destroy(gameObject);
+            
+
         }
 
 
