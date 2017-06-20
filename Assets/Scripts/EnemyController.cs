@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour {
     public Transform bombSpawnPoint;
     public bool bank;
     public GameObject GameManager;
+    public int hitPoints;
 
 
     private Vector3 previous;
@@ -88,12 +89,24 @@ public class EnemyController : MonoBehaviour {
             {
                 GameManager.GetComponent<GameController>().score += 10;
                 GameManager.GetComponent<GameController>().hits++;
+
+                hitPoints--;
             }
 
-            GameObject newExplosion = (GameObject)Instantiate(explosion, transform.position, Quaternion.identity);
-            Destroy(newExplosion, 2);
-            Destroy(gameObject);
+            if (gameObject.tag == "EnemyBomber")
+            {
+                hitPoints--;
 
+                gameObject.GetComponentInChildren<HitMarkerController>().current--;
+            }
+
+            
+            if(hitPoints == 0)
+            {
+                GameObject newExplosion = (GameObject)Instantiate(explosion, transform.position, Quaternion.identity);
+                Destroy(newExplosion, 2);
+                Destroy(gameObject);
+            }
             
 
         }

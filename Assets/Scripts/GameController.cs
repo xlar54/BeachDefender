@@ -58,6 +58,7 @@ public class GameController : MonoBehaviour {
                     timer = 60;
                     PlaneSpawnPoint.GetComponent<EnemyGenerator>().spawnMin = 1;
                     PlaneSpawnPoint.GetComponent<EnemyGenerator>().spawnMax = 1;
+                    PlaneSpawnPoint.GetComponent<EnemyGenerator>().bomberPercentage = 5;
                     break;
                 case 2:
                     txt = "Shoot down 15 fighters in 60 seconds!";
@@ -66,6 +67,7 @@ public class GameController : MonoBehaviour {
                     timer = 60;
                     PlaneSpawnPoint.GetComponent<EnemyGenerator>().spawnMin = 1;
                     PlaneSpawnPoint.GetComponent<EnemyGenerator>().spawnMax = 3;
+                    PlaneSpawnPoint.GetComponent<EnemyGenerator>().bomberPercentage = 5;
                     break;
                 case 3:
                     txt = "Shoot down 10 fighters in 45 seconds!";
@@ -74,6 +76,7 @@ public class GameController : MonoBehaviour {
                     timer = 60;
                     PlaneSpawnPoint.GetComponent<EnemyGenerator>().spawnMin = 2;
                     PlaneSpawnPoint.GetComponent<EnemyGenerator>().spawnMax = 5;
+                    PlaneSpawnPoint.GetComponent<EnemyGenerator>().bomberPercentage = 10;
                     break;
             }
 
